@@ -5,3 +5,15 @@
   - Press Space + Left Mouse Click to: 
     - Plant flowers on the floor or on top of each other
     - Turn yellow-leaf trees back to green-leaf trees 
+- To run project in local environment, install a local server for web development. An option I used is [Servez](https://greggman.github.io/servez/). You can follow the link to quickly set up node.js (if you haven't had it) and the local server on your computer (under the Development/Setup section on the website). After finishing the setup, run this command anywhere in the terminal:
+```
+servez [path to project folder]
+```
+For example, in my case I run Servez server with this command:
+```
+servez /Users/maddietong/threejs/threejs-project
+```
+Then, open your web browser and run the project on localhost:
+```
+localhost:8080
+```
