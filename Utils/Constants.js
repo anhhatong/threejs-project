@@ -42,7 +42,7 @@ const Constants = {
     screenSpacePanning: false,
     enableDamping: true, // an animation loop is required when either damping or auto-rotation are enabled
     dampingFactor: 0.03,
-    keyPanSpeed: 15
+    keyPanSpeed: 20
   },
 };
 

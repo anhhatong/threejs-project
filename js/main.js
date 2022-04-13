@@ -13,7 +13,7 @@ import Helpers from "../Utils/Helpers.js";
 const objectsFloor = [];
 const objectsTree = [];
 let t = 0;
-let scene, renderer, canvas, camera, controls, dome, hemLight;
+let scene, renderer, canvas, camera, controls, dome, hemLight, floor;
 const day = new THREE.Color(0x2b2f77);
 const duskdawn = new THREE.Color(0x070b34);
 const nightSkyColor = 0x855988;
@@ -37,7 +37,6 @@ const init = () => {
     Constants.camera.far
   );
   camera.position.z = Constants.camera.z;
-  camera.position.y = Constants.camera.y;
 
   // Create scene
   scene = new THREE.Scene();
@@ -84,11 +83,34 @@ const init = () => {
   controls = new Controls(camera, Constants.controls);
 
   // Create floor
-  new Floor(Constants.floor, scene, objectsFloor, controls.controls, camera);
+  floor = new Floor(
+    Constants.floor,
+    scene,
+    objectsFloor,
+    controls.controls,
+    camera
+  );
 
   // Create raycaster for flower planting
   new Raycaster(camera, scene, objectsFloor);
   new RaycasterTree(camera, scene, objectsTree);
+};
+
+const adjustCamera = () => {
+  let castFrom = new THREE.Vector3();
+  // Vector to cast from camera down to floor
+  let castDirection = new THREE.Vector3(0, -1, 0);
+  let raycaster = new THREE.Raycaster(camera.position);
+  castFrom.copy(camera.position); // get camera current position
+  castFrom.y += 300;
+  raycaster.set(castFrom, castDirection);
+  let intersections = raycaster.intersectObject(floor.floor);
+  if (intersections.length > 0) {
+    // Elevate camera x unit from the floor
+    camera.position.y = intersections[0].point.y + 20; 
+  }
+
+  camera.updateProjectionMatrix();
 };
 
 const lerpBackground = () => {
@@ -132,6 +154,7 @@ const animate = (time) => {
 
   rotateDome(time);
   lerpBackground();
+  adjustCamera();
 
   controls.controls.update();
   requestAnimationFrame(animate);
