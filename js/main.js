@@ -43,8 +43,6 @@ const init = () => {
   scene = new THREE.Scene();
   scene.background = new THREE.Color();
 
-  // Create floor
-  new Floor(Constants.floor, scene, objectsFloor);
   // Create sky
   dome = new SkySphere(Constants.skySphere, scene);
   // Create trees
@@ -84,6 +82,10 @@ const init = () => {
 
   // Create controls
   controls = new Controls(camera, Constants.controls);
+
+  // Create floor
+  new Floor(Constants.floor, scene, objectsFloor, controls.controls, camera);
+
   // Create raycaster for flower planting
   new Raycaster(camera, scene, objectsFloor);
   new RaycasterTree(camera, scene, objectsTree);
