@@ -131,10 +131,10 @@ const init = () => {
   new Raycaster(camera, scene, objectsFloor, flowerSound);
   new RaycasterTree(camera, scene, objectsTree);
 
-  document.addEventListener("mousedown", test);
+  document.addEventListener("mousedown", playSound);
 };
 
-const test = () => {
+const playSound = () => {
   if (!music.isPlaying) music.play();
   if (!windSound.isPlaying) windSound.play();
 };
