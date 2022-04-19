@@ -23,13 +23,13 @@ const Constants = {
     y: 10,
   },
   tree: {
-    total: 600,
+    total: 100,
   },
-  leaves: { r: 10, height: 60, rSegments: 32 },
+  leaves: { r: 10, height: 160, rSegments: 32 },
   trunk: {
     rTop: 4,
     rBottom: 10,
-    height: 100,
+    height: 300,
     rSegments: 6,
     heightSegments: 1,
   },
@@ -42,7 +42,7 @@ const Constants = {
     screenSpacePanning: false,
     enableDamping: true, // an animation loop is required when either damping or auto-rotation are enabled
     dampingFactor: 0.03,
-    keyPanSpeed: 20
+    keyPanSpeed: 20,
   },
 };
 

@@ -11,6 +11,9 @@ class Stem {
     });
     this.stem = new THREE.Mesh(this.geometryStem, this.materialStem);
     this.stem.position.copy(intersect.point).add(intersect.face.normal);
+
+    
+
     scene.add(this.stem);
     objects.push(this.stem);
   }
