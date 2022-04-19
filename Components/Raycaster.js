@@ -3,7 +3,7 @@ import Flower from "../Components/Flower.js";
 import Helpers from "../Utils/Helpers.js";
 
 class Raycaster {
-  constructor(camera, scene, objects) {
+  constructor(camera, scene, objects, flowerSound) {
     this.raycaster = new THREE.Raycaster();
     this.pointer = new THREE.Vector2();
     this.isSpaceDown = false;
@@ -22,6 +22,7 @@ class Raycaster {
         const intersect = intersects[0];
         // Create a flower
         if (this.isSpaceDown) {
+          if (!flowerSound.isPlaying) flowerSound.play();
           new Flower(
             { color: Helpers.getRandomFlowerColor() },
             { r: 0.3, widthSegments: 32, heightSegments: 16, color: 0xffa500 },

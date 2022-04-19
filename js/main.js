@@ -13,7 +13,17 @@ import Helpers from "../Utils/Helpers.js";
 const objectsFloor = [];
 const objectsTree = [];
 let t = 0;
-let scene, renderer, canvas, camera, controls, dome, hemLight, floor;
+let scene,
+  renderer,
+  canvas,
+  camera,
+  controls,
+  dome,
+  hemLight,
+  floor,
+  music,
+  windSound,
+  flowerSound;
 const day = new THREE.Color(0x2b2f77);
 const duskdawn = new THREE.Color(0x070b34);
 const nightSkyColor = 0x855988;
@@ -40,7 +50,33 @@ const init = () => {
 
   // Create scene
   scene = new THREE.Scene();
-  scene.background = new THREE.Color();
+  scene.background = new THREE.Color("#DAD9D7");
+
+  const listener = new THREE.AudioListener();
+  camera.add(listener);
+
+  // create a global audio source
+  music = new THREE.Audio(listener);
+  windSound = new THREE.Audio(listener);
+  flowerSound = new THREE.Audio(listener);
+
+  // load a sound and set it as the Audio object's buffer
+  const audioLoader = new THREE.AudioLoader();
+  audioLoader.load("../music.mp3", function (buffer) {
+    music.setBuffer(buffer);
+    music.setLoop(true);
+    music.setVolume(0.2);
+  });
+  audioLoader.load("../wind.mp3", function (buffer) {
+    windSound.setBuffer(buffer);
+    windSound.setLoop(true);
+    windSound.setVolume(0.8);
+  });
+  audioLoader.load("../plant-flower.wav", function (buffer) {
+    flowerSound.setBuffer(buffer);
+    flowerSound.setLoop(false);
+    flowerSound.setVolume(0.5);
+  });
 
   // Create sky
   dome = new SkySphere(Constants.skySphere, scene);
@@ -92,8 +128,15 @@ const init = () => {
   );
 
   // Create raycaster for flower planting
-  new Raycaster(camera, scene, objectsFloor);
+  new Raycaster(camera, scene, objectsFloor, flowerSound);
   new RaycasterTree(camera, scene, objectsTree);
+
+  document.addEventListener("mousedown", test);
+};
+
+const test = () => {
+  if (!music.isPlaying) music.play();
+  if (!windSound.isPlaying) windSound.play();
 };
 
 const adjustCamera = () => {
@@ -102,22 +145,25 @@ const adjustCamera = () => {
   let castDirection = new THREE.Vector3(0, -1, 0);
   let raycaster = new THREE.Raycaster(camera.position);
   castFrom.copy(camera.position); // get camera current position
-  castFrom.y += 300;
+  castFrom.y += 1000;
   raycaster.set(castFrom, castDirection);
   let intersections = raycaster.intersectObject(floor.floor);
   if (intersections.length > 0) {
     // Elevate camera x unit from the floor
-    camera.position.y = intersections[0].point.y + 20; 
+    camera.position.y = intersections[0].point.y + 20;
   }
 
   camera.updateProjectionMatrix();
 };
 
 const lerpBackground = () => {
-  t += 0.01;
-  scene.background.copy(day).lerpHSL(duskdawn, 0.3 * Math.sin(t) + 0.5);
+  t += 0.02;
+  // scene.background.copy(day).lerpHSL(duskdawn, 0.3 * Math.sin(t) + 0.5);
+  dome.outerSphere.material.color
+    .copy(day)
+    .lerpHSL(duskdawn, 0.3 * Math.sin(t) + 0.5);
   // Create fog
-  scene.fog = new THREE.FogExp2(scene.background, 0.0009);
+  scene.fog = new THREE.FogExp2(dome.outerSphere.material.color, 0.0009);
 };
 
 const rotateDome = (time) => {
