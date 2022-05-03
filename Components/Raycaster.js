@@ -75,6 +75,40 @@ class Raycaster {
               ice.position.y += 2;
               scene.add(ice);
               break;
+            case Constants.uids.lava1:
+              const mineralGeo1 = new THREE.IcosahedronGeometry(20);
+              const mineral1 = new THREE.Mesh(
+                mineralGeo1,
+                new THREE.MeshPhysicalMaterial({
+                  color: 0xd39c43,
+                  roughness: 0.5,
+                  transmission: 1,
+                  thickness: 0,
+                  metalness: Math.random() * 1,
+                  reflectivity: 1,
+                  clearcoat: 1,
+                })
+              );
+              mineral1.position.copy(intersect.point).add(intersect.face.normal);
+              scene.add(mineral1);
+              break;
+            case Constants.uids.lava2:
+              const mineralGeo2 = new THREE.IcosahedronGeometry(20);
+              const mineral2 = new THREE.Mesh(
+                mineralGeo2,
+                new THREE.MeshPhysicalMaterial({
+                  color: 0x416656,
+                  roughness: 0.5,
+                  transmission: 1,
+                  thickness: 0,
+                  metalness: Math.random() * 1,
+                  reflectivity: 1,
+                  clearcoat: 1,
+                })
+              );
+              mineral2.position.copy(intersect.point).add(intersect.face.normal);
+              scene.add(mineral2);
+              break;
             default:
               playSound(flowerSound);
               new Flower(

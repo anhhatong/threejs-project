@@ -239,6 +239,8 @@ const init = () => {
   lava.position.y -= 750;
   scene.add(lava);
   objectsFloor.push(lava);
+
+  console.log(lava, lathe);
 };
 
 const addShape = (
