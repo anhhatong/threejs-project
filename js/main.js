@@ -32,6 +32,7 @@ let scene,
   ice,
   iceSound,
   waterSound,
+  textureLava,
   iceTexture;
 const day = new THREE.Color(0x2b2f77);
 const duskdawn = new THREE.Color(0x070b34);
@@ -190,6 +191,54 @@ const init = () => {
     0,
     1
   );
+
+  const points = [];
+  for (let i = 0; i < 10; i++) {
+    points.push(new THREE.Vector2(Math.sin(i * 0.2) * 500 + 5, (i - 5) * 60));
+  }
+  const geometry = new THREE.LatheGeometry(points);
+
+  const loaderLava = new THREE.TextureLoader();
+  textureLava = loaderLava.load(Textures.lava);
+  textureLava.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  textureLava.repeat.set(1, 1);
+
+  const material = new THREE.MeshBasicMaterial({
+    map: textureLava,
+    side: THREE.DoubleSide,
+  });
+  const lathe = new THREE.Mesh(geometry, material);
+  lathe.rotateX(Math.PI);
+  lathe.translateZ(-1200);
+  lathe.translateY(-150);
+  scene.add(lathe);
+  objectsFloor.push(lathe);
+
+  const lavaGeometry = new THREE.SphereGeometry(
+    1000,
+    32,
+    16,
+    200,
+    Math.PI * 2,
+    0,
+    Math.PI * 2
+  );
+
+  const lava = new THREE.Mesh(
+    lavaGeometry,
+    new THREE.MeshPhysicalMaterial({
+      color: 0xff2500,
+      roughness: 0.3,
+      transmission: 1,
+      thickness: 0,
+    })
+  );
+  lava.scale.set(1, 1, 1);
+  lava.rotation.x = -Math.PI / 2;
+  lava.position.z += 1200;
+  lava.position.y -= 750;
+  scene.add(lava);
+  objectsFloor.push(lava);
 };
 
 const addShape = (

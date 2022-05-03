@@ -42,7 +42,7 @@ const Constants = {
     screenSpacePanning: false,
     enableDamping: true, // an animation loop is required when either damping or auto-rotation are enabled
     dampingFactor: 0.03,
-    keyPanSpeed: 20,
+    keyPanSpeed: 100,
   },
   uids: {
     water: "C7D01066-E5BE-450E-81E2-7C36142C92FF",
