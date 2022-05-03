@@ -32,6 +32,8 @@ let scene,
   ice,
   iceSound,
   waterSound,
+  mineralSound,
+  mineral2Sound,
   textureLava,
   iceTexture;
 const day = new THREE.Color(0x2b2f77);
@@ -71,6 +73,8 @@ const init = () => {
   flowerSound = new THREE.Audio(listener);
   iceSound = new THREE.Audio(listener);
   waterSound = new THREE.Audio(listener);
+  mineralSound = new THREE.Audio(listener);
+  mineral2Sound = new THREE.Audio(listener);
 
   // load a sound and set it as the Audio object's buffer
   const audioLoader = new THREE.AudioLoader();
@@ -87,17 +91,27 @@ const init = () => {
   audioLoader.load("../plant-flower.wav", function (buffer) {
     flowerSound.setBuffer(buffer);
     flowerSound.setLoop(false);
-    flowerSound.setVolume(0.5);
+    flowerSound.setVolume(1);
   });
   audioLoader.load("../ice.wav", function (buffer) {
     iceSound.setBuffer(buffer);
     iceSound.setLoop(false);
-    iceSound.setVolume(0.5);
+    iceSound.setVolume(1);
   });
   audioLoader.load("../water.wav", function (buffer) {
     waterSound.setBuffer(buffer);
     waterSound.setLoop(false);
-    waterSound.setVolume(0.5);
+    waterSound.setVolume(1);
+  });
+  audioLoader.load("../mineral.wav", function (buffer) {
+    mineralSound.setBuffer(buffer);
+    mineralSound.setLoop(false);
+    mineralSound.setVolume(1);
+  });
+  audioLoader.load("../mineral2.wav", function (buffer) {
+    mineral2Sound.setBuffer(buffer);
+    mineral2Sound.setLoop(false);
+    mineral2Sound.setVolume(1);
   });
 
   // Create sky
@@ -150,10 +164,19 @@ const init = () => {
   );
 
   // Create raycaster for flower planting
-  new Raycaster(camera, scene, objectsFloor, flowerSound, iceSound, waterSound);
+  new Raycaster(
+    camera,
+    scene,
+    objectsFloor,
+    flowerSound,
+    iceSound,
+    waterSound,
+    mineralSound,
+    mineral2Sound
+  );
   new RaycasterTree(camera, scene, objectsTree);
 
-  // document.addEventListener("mousedown", playSound);
+  document.addEventListener("mousedown", playSound);
 
   const loader = new THREE.TextureLoader();
   texture = loader.load(Textures.water);

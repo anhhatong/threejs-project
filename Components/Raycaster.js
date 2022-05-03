@@ -5,7 +5,16 @@ import Constants from "../Utils/Constants.js";
 import Textures from "../Textures/index.js";
 
 class Raycaster {
-  constructor(camera, scene, objects, flowerSound, iceSound, waterSound) {
+  constructor(
+    camera,
+    scene,
+    objects,
+    flowerSound,
+    iceSound,
+    waterSound,
+    mineralSound,
+    mineral2Sound
+  ) {
     this.raycaster = new THREE.Raycaster();
     this.pointer = new THREE.Vector2();
     this.isSpaceDown = false;
@@ -76,6 +85,7 @@ class Raycaster {
               scene.add(ice);
               break;
             case Constants.uids.lava1:
+              playSound(mineral2Sound);
               const mineralGeo1 = new THREE.IcosahedronGeometry(20);
               const mineral1 = new THREE.Mesh(
                 mineralGeo1,
@@ -89,10 +99,13 @@ class Raycaster {
                   clearcoat: 1,
                 })
               );
-              mineral1.position.copy(intersect.point).add(intersect.face.normal);
+              mineral1.position
+                .copy(intersect.point)
+                .add(intersect.face.normal);
               scene.add(mineral1);
               break;
             case Constants.uids.lava2:
+              playSound(mineralSound);
               const mineralGeo2 = new THREE.IcosahedronGeometry(20);
               const mineral2 = new THREE.Mesh(
                 mineralGeo2,
@@ -106,7 +119,9 @@ class Raycaster {
                   clearcoat: 1,
                 })
               );
-              mineral2.position.copy(intersect.point).add(intersect.face.normal);
+              mineral2.position
+                .copy(intersect.point)
+                .add(intersect.face.normal);
               scene.add(mineral2);
               break;
             default:
