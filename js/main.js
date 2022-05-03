@@ -28,9 +28,9 @@ let scene,
   pondGeometry,
   pond,
   texture,
-  objectGeometry,
-  object,
-  texture2;
+  iceGeometry,
+  ice,
+  iceTexture;
 const day = new THREE.Color(0x2b2f77);
 const duskdawn = new THREE.Color(0x070b34);
 const nightSkyColor = 0x855988;
@@ -193,7 +193,7 @@ const addShape = (
 ) => {
   // extruded shape
 
-  objectGeometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+  iceGeometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
   pondGeometry = new THREE.SphereGeometry(
     1500,
     32,
@@ -215,20 +215,23 @@ const addShape = (
   scene.add(pond);
 
   const loader2 = new THREE.TextureLoader();
-  texture2 = loader2.load(Textures.water);
-  texture2.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  texture2.repeat.set(0.00008, 1);
+  iceTexture = loader2.load(Textures.water);
+  iceTexture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  iceTexture.repeat.set(0.00008, 1);
 
-  object = new THREE.Mesh(
-    objectGeometry,
-    new THREE.MeshBasicMaterial({ map: texture2 })
+  ice = new THREE.Mesh(
+    iceGeometry,
+    new THREE.MeshBasicMaterial({ map: iceTexture })
   );
-  object.position.set(x + 400, y, z + 575);
-  object.rotation.set(rx, ry, rz);
-  object.scale.set(s, s, s);
-  object.rotation.x = -Math.PI / 2;
-  scene.add(object);
-  adjustObject(object);
+  ice.position.set(x + 400, y, z + 850);
+  ice.rotation.set(rx, ry, rz);
+  ice.scale.set(s, s, s);
+  ice.rotation.x = -Math.PI / 2;
+  scene.add(ice);
+  adjustObject(ice);
+
+  objectsFloor.push(pond);
+  objectsFloor.push(ice);
 };
 
 const playSound = () => {
@@ -244,7 +247,7 @@ const adjustCamera = () => {
   castFrom.copy(camera.position); // get camera current position
   castFrom.y += 1000;
   raycaster.set(castFrom, castDirection);
-  let intersections = raycaster.intersectObject(floor.floor);
+  let intersections = raycaster.intersectObjects(objectsFloor);
   if (intersections.length > 0) {
     // Elevate camera x unit from the floor
     camera.position.y = intersections[0].point.y + 20;

@@ -7,6 +7,7 @@ class Floor {
     this.geometry.rotateX(Math.PI / 2);
     this.camera = camera;
     this.controls = controls;
+    this.objects = objects;
 
     const data = this.generateHeight(50, 50);
 
@@ -32,7 +33,7 @@ class Floor {
     this.floor.position.y = -850;
     this.floor.receiveShadow = true;
     scene.add(this.floor);
-    objects.push(this.floor);
+    this.objects.push(this.floor);
 
     this.cursorGeometry = new THREE.CylinderGeometry(8, 8, 2);
     this.cursorGeometry.rotateX(Math.PI / 2);
@@ -54,13 +55,14 @@ class Floor {
     this.raycaster.setFromCamera(this.pointer, this.camera);
 
     // See if the ray from the camera into the world hits one of our meshes
-    const intersects = this.raycaster.intersectObject(this.floor);
+    const intersects = this.raycaster.intersectObjects(this.objects, false);
     // Toggle rotation bool for meshes that we clicked
     if (intersects.length > 0) {
       this.cursor.position.set(0, 0, 0);
       this.cursor.lookAt(intersects[0].face.normal);
-
       this.cursor.position.copy(intersects[0].point);
+      if (intersects[0].object.uuid !== Constants.uids.floor)
+        this.cursor.rotateX(Math.PI/2);
     }
   };
 

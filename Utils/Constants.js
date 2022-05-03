@@ -44,6 +44,11 @@ const Constants = {
     dampingFactor: 0.03,
     keyPanSpeed: 20,
   },
+  uids: {
+    water: "C7D01066-E5BE-450E-81E2-7C36142C92FF",
+    ice: "53175A95-9963-4870-B910-2AFF9B63E7A1",
+    floor: "24F0C84D-F1B7-4A3C-9022-50D3076EFCA4",
+  },
 };
 
 export default Constants;
