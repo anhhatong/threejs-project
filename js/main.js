@@ -30,6 +30,8 @@ let scene,
   texture,
   iceGeometry,
   ice,
+  iceSound,
+  waterSound,
   iceTexture;
 const day = new THREE.Color(0x2b2f77);
 const duskdawn = new THREE.Color(0x070b34);
@@ -66,6 +68,8 @@ const init = () => {
   music = new THREE.Audio(listener);
   windSound = new THREE.Audio(listener);
   flowerSound = new THREE.Audio(listener);
+  iceSound = new THREE.Audio(listener);
+  waterSound = new THREE.Audio(listener);
 
   // load a sound and set it as the Audio object's buffer
   const audioLoader = new THREE.AudioLoader();
@@ -83,6 +87,16 @@ const init = () => {
     flowerSound.setBuffer(buffer);
     flowerSound.setLoop(false);
     flowerSound.setVolume(0.5);
+  });
+  audioLoader.load("../ice.wav", function (buffer) {
+    iceSound.setBuffer(buffer);
+    iceSound.setLoop(false);
+    iceSound.setVolume(0.5);
+  });
+  audioLoader.load("../water.wav", function (buffer) {
+    waterSound.setBuffer(buffer);
+    waterSound.setLoop(false);
+    waterSound.setVolume(0.5);
   });
 
   // Create sky
@@ -135,7 +149,7 @@ const init = () => {
   );
 
   // Create raycaster for flower planting
-  new Raycaster(camera, scene, objectsFloor, flowerSound);
+  new Raycaster(camera, scene, objectsFloor, flowerSound, iceSound, waterSound);
   new RaycasterTree(camera, scene, objectsTree);
 
   // document.addEventListener("mousedown", playSound);

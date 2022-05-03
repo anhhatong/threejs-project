@@ -5,10 +5,14 @@ import Constants from "../Utils/Constants.js";
 import Textures from "../Textures/index.js";
 
 class Raycaster {
-  constructor(camera, scene, objects, flowerSound) {
+  constructor(camera, scene, objects, flowerSound, iceSound, waterSound) {
     this.raycaster = new THREE.Raycaster();
     this.pointer = new THREE.Vector2();
     this.isSpaceDown = false;
+
+    const playSound = (sound) => {
+      if (!sound.isPlaying) sound.play();
+    };
 
     const onPointerDown = (event) => {
       this.pointer.set(
@@ -23,11 +27,10 @@ class Raycaster {
       if (intersects.length > 0) {
         const intersect = intersects[0];
         const uid = intersect.object.uuid;
-        console.log(intersect);
-        // Create a flower
         if (this.isSpaceDown) {
           switch (uid) {
             case Constants.uids.water:
+              playSound(waterSound);
               const shape = new THREE.Mesh(
                 new THREE.TorusGeometry(10, 4, 8, 30),
                 new THREE.MeshPhongMaterial({ color: 0xffd800 })
@@ -54,6 +57,7 @@ class Raycaster {
               scene.add(mouth);
               break;
             case Constants.uids.ice:
+              playSound(iceSound);
               const ice = new THREE.Mesh(
                 new THREE.BoxGeometry(
                   Math.random() * 20 + 10,
@@ -72,7 +76,7 @@ class Raycaster {
               scene.add(ice);
               break;
             default:
-              if (!flowerSound.isPlaying) flowerSound.play();
+              playSound(flowerSound);
               new Flower(
                 { color: Helpers.getRandomFlowerColor() },
                 {
