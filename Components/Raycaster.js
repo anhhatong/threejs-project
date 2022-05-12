@@ -2,7 +2,6 @@ import * as THREE from "../node_modules/three/build/three.module.js";
 import Flower from "../Components/Flower.js";
 import Helpers from "../Utils/Helpers.js";
 import Constants from "../Utils/Constants.js";
-import Textures from "../Textures/index.js";
 
 class Raycaster {
   constructor(
@@ -36,8 +35,10 @@ class Raycaster {
       if (intersects.length > 0) {
         const intersect = intersects[0];
         const uid = intersect.object.uuid;
+        // When an object is being planted
         if (this.isSpaceDown) {
           switch (uid) {
+            // Ducky planted on water mesh
             case Constants.uids.water:
               playSound(waterSound);
               const shape = new THREE.Mesh(
@@ -65,6 +66,7 @@ class Raycaster {
               scene.add(shape);
               scene.add(mouth);
               break;
+            // Ice block planted on ice mesh
             case Constants.uids.ice:
               playSound(iceSound);
               const ice = new THREE.Mesh(
@@ -84,6 +86,7 @@ class Raycaster {
               ice.position.y += 2;
               scene.add(ice);
               break;
+            // Mineral block planted on lava mesh
             case Constants.uids.lava1:
               playSound(mineral2Sound);
               const mineralGeo1 = new THREE.IcosahedronGeometry(20);
@@ -104,6 +107,7 @@ class Raycaster {
                 .add(intersect.face.normal);
               scene.add(mineral1);
               break;
+            // Mineral block planted on mountain lava mesh
             case Constants.uids.lava2:
               playSound(mineralSound);
               const mineralGeo2 = new THREE.IcosahedronGeometry(20);
@@ -124,6 +128,7 @@ class Raycaster {
                 .add(intersect.face.normal);
               scene.add(mineral2);
               break;
+            // Flower planted on regular floor mesh
             default:
               playSound(flowerSound);
               new Flower(

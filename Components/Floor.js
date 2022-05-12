@@ -1,6 +1,7 @@
 import * as THREE from "../node_modules/three/build/three.module.js";
 import Constants from "../Utils/Constants.js";
 import { ImprovedNoise } from "../node_modules/three/examples/jsm/math/ImprovedNoise.js";
+
 class Floor {
   constructor(floor, scene, objects, controls, camera) {
     this.geometry = new THREE.PlaneGeometry(floor.width, floor.height, 49, 49);

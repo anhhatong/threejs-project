@@ -1,5 +1,4 @@
 import * as THREE from "../node_modules/three/build/three.module.js";
-import Textures from "../Textures/index.js";
 
 class Pond {
   constructor(scene, objectsFloor, texture, x, y, z) {
