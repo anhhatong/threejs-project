@@ -13,6 +13,7 @@ import Textures from "../Textures/index.js";
 import Ice from "../Components/Ice.js";
 import Pond from "../Components/Pond.js";
 import Lava from "../Components/Lava.js";
+import Sounds from "../Sounds/index.js";
 
 const objectsFloor = [];
 const objectsTree = [];
@@ -64,7 +65,7 @@ const init = () => {
   const listener = new THREE.AudioListener();
   camera.add(listener);
 
-  // create a global audio source
+  // Create a global audio source
   music = new THREE.Audio(listener);
   windSound = new THREE.Audio(listener);
   flowerSound = new THREE.Audio(listener);
@@ -73,43 +74,15 @@ const init = () => {
   mineralSound = new THREE.Audio(listener);
   mineral2Sound = new THREE.Audio(listener);
 
-  // load a sound and set it as the Audio object's buffer
+  // Load sounds
   const audioLoader = new THREE.AudioLoader();
-  audioLoader.load("../music.mp3", function (buffer) {
-    music.setBuffer(buffer);
-    music.setLoop(true);
-    music.setVolume(0.2);
-  });
-  audioLoader.load("../wind.mp3", function (buffer) {
-    windSound.setBuffer(buffer);
-    windSound.setLoop(true);
-    windSound.setVolume(0.8);
-  });
-  audioLoader.load("../plant-flower.wav", function (buffer) {
-    flowerSound.setBuffer(buffer);
-    flowerSound.setLoop(false);
-    flowerSound.setVolume(1);
-  });
-  audioLoader.load("../ice.wav", function (buffer) {
-    iceSound.setBuffer(buffer);
-    iceSound.setLoop(false);
-    iceSound.setVolume(1);
-  });
-  audioLoader.load("../water.wav", function (buffer) {
-    waterSound.setBuffer(buffer);
-    waterSound.setLoop(false);
-    waterSound.setVolume(1);
-  });
-  audioLoader.load("../mineral.wav", function (buffer) {
-    mineralSound.setBuffer(buffer);
-    mineralSound.setLoop(false);
-    mineralSound.setVolume(1);
-  });
-  audioLoader.load("../mineral2.wav", function (buffer) {
-    mineral2Sound.setBuffer(buffer);
-    mineral2Sound.setLoop(false);
-    mineral2Sound.setVolume(1);
-  });
+  Helpers.loadSound(audioLoader, Sounds.music, music, 0.2, true);
+  Helpers.loadSound(audioLoader, Sounds.wind, windSound, 0.8, true);
+  Helpers.loadSound(audioLoader, Sounds.plant, flowerSound, 1, false);
+  Helpers.loadSound(audioLoader, Sounds.ice, iceSound, 1, false);
+  Helpers.loadSound(audioLoader, Sounds.water, waterSound, 1, false);
+  Helpers.loadSound(audioLoader, Sounds.mineral, mineralSound, 1, false);
+  Helpers.loadSound(audioLoader, Sounds.mineral2, mineral2Sound, 1, false);
 
   // Create sky
   dome = new SkySphere(Constants.skySphere, scene);

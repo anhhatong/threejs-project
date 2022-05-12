@@ -16,6 +16,13 @@ const Helpers = {
     return colors[Math.floor(Math.random() * 6)];
   },
   pickRandomTree: () => Math.floor(Math.random() * 50), // probablity 1/50
+  loadSound: (audioLoader, path, sound, volume, isLooping) => {
+    audioLoader.load(path, function (buffer) {
+      sound.setBuffer(buffer);
+      sound.setLoop(isLooping);
+      sound.setVolume(volume);
+    });
+  },
 };
 
 export default Helpers;
