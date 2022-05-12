@@ -12,6 +12,7 @@ class Floor {
     const data = this.generateHeight(50, 50);
 
     const vertices = this.geometry.attributes.position.array;
+    // Set random height to terrain
     for (let i = 0, j = 0, l = vertices.length; i < l; i++, j += 3) {
       vertices[j + 1] = data[i] * 10;
     }
@@ -61,9 +62,12 @@ class Floor {
     }
   };
 
+   /**
+   * Function to create textures and shades of terrain
+   * Thanks to THREE.js geometry/terrain/raycast example code
+   * https://github.com/mrdoob/three.js/blob/master/examples/webgl_geometry_terrain_raycast.html
+   */
   generateTexture(data, width, height) {
-    // bake lighting into texture by drawing a canvas
-
     let context, image, imageData;
 
     const canvas = document.createElement("canvas");
@@ -110,6 +114,11 @@ class Floor {
     return canvasScaled;
   }
 
+  /**
+   * Function to generate random heights of terrain
+   * Thanks to THREE.js geometry/terrain/raycast example code
+   * https://github.com/mrdoob/three.js/blob/master/examples/webgl_geometry_terrain_raycast.html
+   */
   generateHeight(width, height) {
     let seed = Math.PI / 4;
     window.Math.random = function () {
