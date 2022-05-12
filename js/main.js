@@ -10,6 +10,7 @@ import DirectLight from "../Components/DirectLight.js";
 import RaycasterTree from "../Components/RaycasterTree.js";
 import Helpers from "../Utils/Helpers.js";
 import Textures from "../Textures/index.js";
+import Ice from "../Components/Ice.js";
 
 const objectsFloor = [];
 const objectsTree = [];
@@ -184,34 +185,36 @@ const init = () => {
   texture.repeat.set(45, 45);
   // it's necessary to apply these settings in order to correctly display the texture on a shape geometry
 
-  const splinepts = [];
-  splinepts.push(new THREE.Vector3(70, 20));
-  splinepts.push(new THREE.Vector3(80, 90));
-  splinepts.push(new THREE.Vector3(-30, 70));
-  splinepts.push(new THREE.Vector3(0, 0));
+  new Ice(scene, floor, objectsFloor, texture, -50, -100, 0);
 
-  const splineShape = new THREE.Shape().moveTo(0, 0).splineThru(splinepts);
+  // const splinepts = [];
+  // splinepts.push(new THREE.Vector3(70, 20));
+  // splinepts.push(new THREE.Vector3(80, 90));
+  // splinepts.push(new THREE.Vector3(-30, 70));
+  // splinepts.push(new THREE.Vector3(0, 0));
 
-  const extrudeSettings = {
-    depth: 50,
-    bevelEnabled: true,
-    bevelSegments: 2,
-    steps: 2,
-    bevelSize: 700,
-    bevelThickness: 1,
-  };
+  // const splineShape = new THREE.Shape().moveTo(0, 0).splineThru(splinepts);
+
+  // const extrudeSettings = {
+  //   depth: 50,
+  //   bevelEnabled: true,
+  //   bevelSegments: 2,
+  //   steps: 2,
+  //   bevelSize: 700,
+  //   bevelThickness: 1,
+  // };
 
   addShape(
-    splineShape,
+    // splineShape,
     texture,
-    extrudeSettings,
-    0xd4f1f9,
+    // extrudeSettings,
+    // 0xd4f1f9,
     -50,
     -100,
     0,
-    0,
-    0,
-    0,
+    // 0,
+    // 0,
+    // 0,
     1
   );
 
@@ -267,21 +270,21 @@ const init = () => {
 };
 
 const addShape = (
-  shape,
+  // shape,
   texture,
-  extrudeSettings,
-  color,
+  // extrudeSettings,
+  // color,
   x,
   y,
   z,
-  rx,
-  ry,
-  rz,
+  // rx,
+  // ry,
+  // rz,
   s
 ) => {
   // extruded shape
 
-  iceGeometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+  // iceGeometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
   pondGeometry = new THREE.SphereGeometry(
     1500,
     32,
@@ -302,24 +305,24 @@ const addShape = (
   pond.position.y -= 1390;
   scene.add(pond);
 
-  const loader2 = new THREE.TextureLoader();
-  iceTexture = loader2.load(Textures.water);
-  iceTexture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  iceTexture.repeat.set(0.00008, 1);
+  // const loader2 = new THREE.TextureLoader();
+  // iceTexture = loader2.load(Textures.water);
+  // iceTexture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  // iceTexture.repeat.set(0.00008, 1);
 
-  ice = new THREE.Mesh(
-    iceGeometry,
-    new THREE.MeshBasicMaterial({ map: iceTexture })
-  );
-  ice.position.set(x + 400, y, z + 850);
-  ice.rotation.set(rx, ry, rz);
-  ice.scale.set(s, s, s);
-  ice.rotation.x = -Math.PI / 2;
-  scene.add(ice);
-  adjustObject(ice);
+  // ice = new THREE.Mesh(
+  //   iceGeometry,
+  //   new THREE.MeshBasicMaterial({ map: iceTexture })
+  // );
+  // ice.position.set(x + 400, y, z + 850);
+  // ice.rotation.set(rx, ry, rz);
+  // ice.scale.set(s, s, s);
+  // ice.rotation.x = -Math.PI / 2;
+  // scene.add(ice);
+  // adjustObject(ice);
 
   objectsFloor.push(pond);
-  objectsFloor.push(ice);
+  // objectsFloor.push(ice);
 };
 
 const playSound = () => {
@@ -337,29 +340,29 @@ const adjustCamera = () => {
   raycaster.set(castFrom, castDirection);
   let intersections = raycaster.intersectObjects(objectsFloor);
   if (intersections.length > 0) {
-    // Elevate camera x unit from the floor
+    // Elevate camera 20 unit from the floor
     camera.position.y = intersections[0].point.y + 20;
   }
 
   camera.updateProjectionMatrix();
 };
 
-const adjustObject = (o) => {
-  const raycaster = new THREE.Raycaster();
-  let castFrom = new THREE.Vector3();
-  let castDirection = new THREE.Vector3(0, -1, 0);
-  castFrom.copy(o.position); // get camera current position
-  castFrom.y += 250;
-  raycaster.set(castFrom, castDirection);
-  // See if the ray from the camera into the world hits one of our meshes
-  const intersects = raycaster.intersectObject(floor.floor);
-  // Toggle rotation bool for meshes that we clicked
-  if (intersects.length > 0) {
-    o.position.set(0, 0, 0);
-    o.lookAt(intersects[0].face.normal);
-    o.position.copy(intersects[0].point);
-  }
-};
+// const adjustObject = (o) => {
+//   const raycaster = new THREE.Raycaster();
+//   let castFrom = new THREE.Vector3();
+//   let castDirection = new THREE.Vector3(0, -1, 0);
+//   castFrom.copy(o.position); // get camera current position
+//   castFrom.y += 250;
+//   raycaster.set(castFrom, castDirection);
+//   // See if the ray from the camera into the world hits one of our meshes
+//   const intersects = raycaster.intersectObject(floor.floor);
+//   // Toggle rotation bool for meshes that we clicked
+//   if (intersects.length > 0) {
+//     o.position.set(0, 0, 0);
+//     o.lookAt(intersects[0].face.normal);
+//     o.position.copy(intersects[0].point);
+//   }
+// };
 
 const lerpBackground = () => {
   t += 0.02;
@@ -406,7 +409,7 @@ const animate = (time) => {
   rotateDome(time);
   lerpBackground();
   adjustCamera();
-  // adjustWater(pond);
+
   // dynamic water surface
   texture.offset.y += 0.0005;
 

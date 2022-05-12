@@ -11,11 +11,6 @@ class Floor {
 
     const data = this.generateHeight(50, 50);
 
-    // this.controls.target.y = data[ 25 + 25 * 50 ] + 50;
-    // this.camera.position.y = controls.target.y + 500;
-    // this.camera.position.x = 2000;
-    // this.controls.update();
-
     const vertices = this.geometry.attributes.position.array;
     for (let i = 0, j = 0, l = vertices.length; i < l; i++, j += 3) {
       vertices[j + 1] = data[i] * 10;
