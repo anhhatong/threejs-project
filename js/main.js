@@ -12,6 +12,7 @@ import Helpers from "../Utils/Helpers.js";
 import Textures from "../Textures/index.js";
 import Ice from "../Components/Ice.js";
 import Pond from "../Components/Pond.js";
+import Lava from "../Components/Lava.js";
 
 const objectsFloor = [];
 const objectsTree = [];
@@ -27,12 +28,11 @@ let scene,
   music,
   windSound,
   flowerSound,
-  texture,
+  waterTexture,
   iceSound,
   waterSound,
   mineralSound,
-  mineral2Sound,
-  textureLava;
+  mineral2Sound;
 const day = new THREE.Color(0x2b2f77);
 const duskdawn = new THREE.Color(0x070b34);
 const nightSkyColor = 0x855988;
@@ -171,67 +171,24 @@ const init = () => {
     mineralSound,
     mineral2Sound
   );
+
+  // Create raycaster for trees
   new RaycasterTree(camera, scene, objectsTree);
 
-  document.addEventListener("mousedown", playSound);
-
+  // Water texture loader to generate texture used for both pond and ice
   const loader = new THREE.TextureLoader();
-  texture = loader.load(Textures.water);
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(45, 45);
-  // it's necessary to apply these settings in order to correctly display the texture on a shape geometry
+  waterTexture = loader.load(Textures.water);
+  waterTexture.wrapS = waterTexture.wrapT = THREE.RepeatWrapping;
+  waterTexture.repeat.set(45, 45);
 
-  new Ice(scene, floor, objectsFloor, texture, -50, -100, 0);
-  new Pond(scene, objectsFloor, texture, -50, -100, 0);
+  // Create ice
+  new Ice(scene, floor, objectsFloor, waterTexture, -50, -100, 0);
+  // Create pond
+  new Pond(scene, objectsFloor, waterTexture, -50, -100, 0);
+  // Create mountain of lava and lava
+  new Lava(scene, objectsFloor);
 
-  const points = [];
-  for (let i = 0; i < 10; i++) {
-    points.push(new THREE.Vector2(Math.sin(i * 0.2) * 500 + 5, (i - 5) * 60));
-  }
-  const geometry = new THREE.LatheGeometry(points);
-
-  const loaderLava = new THREE.TextureLoader();
-  textureLava = loaderLava.load(Textures.lava);
-  textureLava.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  textureLava.repeat.set(1, 1);
-
-  const material = new THREE.MeshBasicMaterial({
-    map: textureLava,
-    side: THREE.DoubleSide,
-  });
-  const lathe = new THREE.Mesh(geometry, material);
-  lathe.rotateX(Math.PI);
-  lathe.translateZ(-1200);
-  lathe.translateY(-150);
-  scene.add(lathe);
-  objectsFloor.push(lathe);
-
-  const lavaGeometry = new THREE.SphereGeometry(
-    1000,
-    32,
-    16,
-    200,
-    Math.PI * 2,
-    0,
-    Math.PI * 2
-  );
-
-  const lava = new THREE.Mesh(
-    lavaGeometry,
-    new THREE.MeshPhysicalMaterial({
-      color: 0xff2500,
-      roughness: 0.3,
-      transmission: 1,
-      thickness: 0,
-    })
-  );
-  lava.scale.set(1, 1, 1);
-  lava.rotation.x = -Math.PI / 2;
-  lava.position.z += 1200;
-  lava.position.y -= 750;
-  scene.add(lava);
-  objectsFloor.push(lava);
-
+  document.addEventListener("mousedown", playSound);
 };
 
 const playSound = () => {
@@ -303,7 +260,7 @@ const animate = (time) => {
   adjustCamera();
 
   // dynamic water surface
-  texture.offset.y += 0.0005;
+  waterTexture.offset.y += 0.0005;
 
   controls.controls.update();
   requestAnimationFrame(animate);
