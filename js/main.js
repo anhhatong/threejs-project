@@ -11,6 +11,7 @@ import RaycasterTree from "../Components/RaycasterTree.js";
 import Helpers from "../Utils/Helpers.js";
 import Textures from "../Textures/index.js";
 import Ice from "../Components/Ice.js";
+import Pond from "../Components/Pond.js";
 
 const objectsFloor = [];
 const objectsTree = [];
@@ -26,17 +27,12 @@ let scene,
   music,
   windSound,
   flowerSound,
-  pondGeometry,
-  pond,
   texture,
-  iceGeometry,
-  ice,
   iceSound,
   waterSound,
   mineralSound,
   mineral2Sound,
-  textureLava,
-  iceTexture;
+  textureLava;
 const day = new THREE.Color(0x2b2f77);
 const duskdawn = new THREE.Color(0x070b34);
 const nightSkyColor = 0x855988;
@@ -186,37 +182,7 @@ const init = () => {
   // it's necessary to apply these settings in order to correctly display the texture on a shape geometry
 
   new Ice(scene, floor, objectsFloor, texture, -50, -100, 0);
-
-  // const splinepts = [];
-  // splinepts.push(new THREE.Vector3(70, 20));
-  // splinepts.push(new THREE.Vector3(80, 90));
-  // splinepts.push(new THREE.Vector3(-30, 70));
-  // splinepts.push(new THREE.Vector3(0, 0));
-
-  // const splineShape = new THREE.Shape().moveTo(0, 0).splineThru(splinepts);
-
-  // const extrudeSettings = {
-  //   depth: 50,
-  //   bevelEnabled: true,
-  //   bevelSegments: 2,
-  //   steps: 2,
-  //   bevelSize: 700,
-  //   bevelThickness: 1,
-  // };
-
-  addShape(
-    // splineShape,
-    texture,
-    // extrudeSettings,
-    // 0xd4f1f9,
-    -50,
-    -100,
-    0,
-    // 0,
-    // 0,
-    // 0,
-    1
-  );
+  new Pond(scene, objectsFloor, texture, -50, -100, 0);
 
   const points = [];
   for (let i = 0; i < 10; i++) {
@@ -266,63 +232,6 @@ const init = () => {
   scene.add(lava);
   objectsFloor.push(lava);
 
-  console.log(lava, lathe);
-};
-
-const addShape = (
-  // shape,
-  texture,
-  // extrudeSettings,
-  // color,
-  x,
-  y,
-  z,
-  // rx,
-  // ry,
-  // rz,
-  s
-) => {
-  // extruded shape
-
-  // iceGeometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-  pondGeometry = new THREE.SphereGeometry(
-    1500,
-    32,
-    16,
-    200,
-    Math.PI * 2,
-    0,
-    Math.PI * 2
-  );
-
-  pond = new THREE.Mesh(
-    pondGeometry,
-    new THREE.MeshBasicMaterial({ map: texture })
-  );
-  pond.position.set(x, y, z - 75);
-  pond.scale.set(s, s, s);
-  pond.rotation.x = -Math.PI / 2;
-  pond.position.y -= 1390;
-  scene.add(pond);
-
-  // const loader2 = new THREE.TextureLoader();
-  // iceTexture = loader2.load(Textures.water);
-  // iceTexture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  // iceTexture.repeat.set(0.00008, 1);
-
-  // ice = new THREE.Mesh(
-  //   iceGeometry,
-  //   new THREE.MeshBasicMaterial({ map: iceTexture })
-  // );
-  // ice.position.set(x + 400, y, z + 850);
-  // ice.rotation.set(rx, ry, rz);
-  // ice.scale.set(s, s, s);
-  // ice.rotation.x = -Math.PI / 2;
-  // scene.add(ice);
-  // adjustObject(ice);
-
-  objectsFloor.push(pond);
-  // objectsFloor.push(ice);
 };
 
 const playSound = () => {
@@ -346,23 +255,6 @@ const adjustCamera = () => {
 
   camera.updateProjectionMatrix();
 };
-
-// const adjustObject = (o) => {
-//   const raycaster = new THREE.Raycaster();
-//   let castFrom = new THREE.Vector3();
-//   let castDirection = new THREE.Vector3(0, -1, 0);
-//   castFrom.copy(o.position); // get camera current position
-//   castFrom.y += 250;
-//   raycaster.set(castFrom, castDirection);
-//   // See if the ray from the camera into the world hits one of our meshes
-//   const intersects = raycaster.intersectObject(floor.floor);
-//   // Toggle rotation bool for meshes that we clicked
-//   if (intersects.length > 0) {
-//     o.position.set(0, 0, 0);
-//     o.lookAt(intersects[0].face.normal);
-//     o.position.copy(intersects[0].point);
-//   }
-// };
 
 const lerpBackground = () => {
   t += 0.02;
