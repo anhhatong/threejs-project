@@ -21,5 +21,6 @@ Then, open your web browser and run the project on localhost:
 localhost:8080
 ```
 # Acknowledgements
+- [THREE.js documentation](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene)
 - [THREE.js examples and codes](https://threejs.org/examples/#webgl_animation_keyframes)
 - Stackoverflow for researching and debugging
